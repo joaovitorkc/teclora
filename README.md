@@ -65,4 +65,6 @@ Repo único (`github.com/joaovitorkc/teclora`). Sem servidor na VM. Passo a pass
 - Arquivos via Spotlight (Enter abre, ⌘Enter revela) e janelas (focar; esquerda, direita, maximizar, centro)
 - Preferências: Geral, Clipboard, Snippets, Quicklinks
 
-Fora ainda: Tecpet (overlay e IA). Sem loja, Sparkle ou sandbox App Store.
+- Tecpet: cinco espécies, overlay, chat local sem modelo
+
+Fora ainda: Cursor e qualquer LLM. Sem loja, Sparkle ou sandbox App Store.

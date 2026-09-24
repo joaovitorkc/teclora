@@ -198,6 +198,8 @@ struct LauncherView: View {
             hint("Mostrar no Finder", keys: ["⌘", "↵"], emphasized: model.commandHeld)
         case .focusWindow:
             hint("Focar", keys: ["↵"], emphasized: true)
+        case .openTecpet:
+            hint("Falar", keys: ["↵"], emphasized: true)
         case .placeWindow:
             hint("Mover", keys: ["↵"], emphasized: true)
         case nil:

@@ -27,6 +27,7 @@ enum LauncherAction: Sendable {
     case focusWindow(WindowTarget)
     case placeWindow(WindowTarget, WindowPlacement)
     case openAccessibilitySettings
+    case openTecpet
 }
 
 enum WindowPlacement: Sendable {

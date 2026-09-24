@@ -25,6 +25,7 @@ final class LauncherModel {
 
     @ObservationIgnored var onConfirm: ((LauncherItem, Bool) -> Void)?
     @ObservationIgnored var onCancel: (() -> Void)?
+    @ObservationIgnored var onRecomputed: (() -> Void)?
     @ObservationIgnored let history: LaunchHistory
     @ObservationIgnored private let providers: [CommandProvider]
     @ObservationIgnored private var apps: [InstalledApp] = []
@@ -124,5 +125,6 @@ final class LauncherModel {
         } else {
             selectedIndex = 0
         }
+        onRecomputed?()
     }
 }

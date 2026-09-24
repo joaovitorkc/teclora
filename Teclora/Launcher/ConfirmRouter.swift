@@ -75,6 +75,8 @@ enum ConfirmRouter {
         case .openAccessibilitySettings:
             closeLauncher(false)
             WindowActions.openAccessibilitySettings()
+        case .openTecpet:
+            closeLauncher(false)
         }
     }
 

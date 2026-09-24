@@ -6,12 +6,19 @@ final class SettingsWindowController {
     private let model: SettingsModel
     private var window: NSWindow?
 
-    init(settings: SettingsStore, clipboard: ClipboardStore, snippets: SnippetStore, quicklinks: QuicklinkStore) {
+    init(
+        settings: SettingsStore,
+        clipboard: ClipboardStore,
+        snippets: SnippetStore,
+        quicklinks: QuicklinkStore,
+        tecpet: TecpetStore
+    ) {
         model = SettingsModel(
             settings: settings,
             clipboard: clipboard,
             snippets: snippets,
-            quicklinks: quicklinks
+            quicklinks: quicklinks,
+            tecpet: tecpet
         )
     }
 

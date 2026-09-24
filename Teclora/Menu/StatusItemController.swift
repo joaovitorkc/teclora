@@ -77,6 +77,46 @@ final class StatusItemController: NSObject {
         return item
     }
 
+    func applyPet(style: PetMenuStyle, portrait: NSImage?) {
+        guard let button = statusItem.button else { return }
+        let mark = NSImage(systemSymbolName: "command", accessibilityDescription: "Teclora")
+        mark?.isTemplate = true
+        mark?.size = NSSize(width: 16, height: 16)
+        let face = portrait.map(Self.menuPortrait)
+        switch style {
+        case .icon:
+            statusItem.length = NSStatusItem.squareLength
+            button.image = mark
+        case .pet:
+            statusItem.length = NSStatusItem.squareLength
+            button.image = face ?? mark
+        case .both:
+            statusItem.length = 40
+            button.image = Self.sideBySide(mark, face)
+        }
+    }
+
+    private static func menuPortrait(_ image: NSImage) -> NSImage {
+        let side: CGFloat = 18
+        let canvas = NSImage(size: NSSize(width: side, height: side))
+        canvas.lockFocus()
+        NSGraphicsContext.current?.imageInterpolation = .none
+        image.draw(in: NSRect(x: 0, y: 0, width: side, height: side))
+        canvas.unlockFocus()
+        canvas.isTemplate = false
+        return canvas
+    }
+
+    private static func sideBySide(_ mark: NSImage?, _ face: NSImage?) -> NSImage? {
+        let canvas = NSImage(size: NSSize(width: 36, height: 18))
+        canvas.lockFocus()
+        mark?.draw(in: NSRect(x: 0, y: 1, width: 16, height: 16))
+        face?.draw(in: NSRect(x: 18, y: 0, width: 18, height: 18))
+        canvas.unlockFocus()
+        canvas.isTemplate = false
+        return canvas
+    }
+
     @objc private func openLauncher() { onOpen() }
     @objc private func openSettings() { onSettings() }
     @objc private func quit() { onQuit() }
