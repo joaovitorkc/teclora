@@ -3,33 +3,36 @@ import Foundation
 /// Funde o catálogo de apps com os providers e reusa o ranking de `AppSearch`.
 @MainActor
 enum SearchIndex {
+    private static let emptyOrder = ["Recentes", "Clipboard", "Comandos", "Aplicativos"]
+    private static let queryOrder = ["Aplicativos", "Clipboard", "Comandos"]
+
     static func sections(
         apps: [InstalledApp],
         query: String,
         history: LaunchHistory,
         providers: [CommandProvider]
     ) -> [LauncherSection] {
-        var sections = AppSearch.sections(from: apps, query: query, history: history)
-        var count = sections.reduce(0) { $0 + $1.items.count }
         let folded = AppSearch.fold(query)
         var grouped: [String: [LauncherItem]] = [:]
-        var order: [String] = []
-
+        for section in AppSearch.sections(from: apps, query: query, history: history) {
+            grouped[section.title, default: []].append(contentsOf: section.items)
+        }
         for provider in providers {
             for hit in provider.hits(for: folded) {
-                if grouped[hit.section] == nil {
-                    order.append(hit.section)
-                }
                 grouped[hit.section, default: []].append(hit)
             }
         }
 
-        for title in order {
+        let order = folded.isEmpty ? emptyOrder : queryOrder
+        let extras = grouped.keys.filter { !order.contains($0) }.sorted()
+        var result: [LauncherSection] = []
+        var index = 0
+        for title in order + extras {
             let items = grouped[title] ?? []
             guard !items.isEmpty else { continue }
-            sections.append(LauncherSection(title: title, items: items, startIndex: count))
-            count += items.count
+            result.append(LauncherSection(title: title, items: items, startIndex: index))
+            index += items.count
         }
-        return sections
+        return result
     }
 }

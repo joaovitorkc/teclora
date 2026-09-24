@@ -180,6 +180,7 @@ struct LauncherView: View {
         case .copyClipboard:
             hint("Copiar", keys: ["↵"], emphasized: !model.commandHeld)
             hint("Fixar", keys: ["⌘", "↵"], emphasized: model.commandHeld)
+            hint("Apagar", keys: ["⌘", "⌫"], emphasized: false)
         case .quit:
             hint("Sair", keys: ["↵"], emphasized: true)
         case .openSettings:

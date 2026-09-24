@@ -176,7 +176,10 @@ final class LauncherPanelController: NSObject, NSWindowDelegate {
         switch code {
         case KeyCode.returnKey, KeyCode.enter:
             model.confirmSelection(alternate: flags.contains(.command))
-        case KeyCode.delete, KeyCode.forwardDelete where flags == .command:
+        case KeyCode.delete, KeyCode.forwardDelete:
+            guard flags.contains(.command), case .clipboard = model.selectedItem?.kind else {
+                return false
+            }
             deleteSelectedClipboard()
         case KeyCode.down:
             model.moveSelection(1)
