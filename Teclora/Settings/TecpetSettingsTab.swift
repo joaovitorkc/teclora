@@ -2,6 +2,9 @@ import SwiftUI
 
 struct TecpetSettingsTab: View {
     @Bindable var store: TecpetStore
+    @State private var memory = TecpetMemory()
+    @State private var profile = "{}"
+    @State private var profileNote = ""
 
     var body: some View {
         Form {
@@ -50,11 +53,34 @@ struct TecpetSettingsTab: View {
                 get: { store.hidden },
                 set: { store.setHidden($0) }
             ))
-            Text("O chat desta fase não chama modelo. Dá para pedir “abrir Safari”.")
+            Text("O que o pet sabe")
+                .font(.headline)
+            TextEditor(text: $profile)
+                .font(.system(size: 12, design: .monospaced))
+                .frame(minHeight: 88)
+            HStack {
+                Button("Gravar perfil") { profileNote = writeProfile() }
+                Text(profileNote)
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
+            Text("JSON até 2 KB. Sem key, o chat só abre app (“abrir Safari”). Com key, o Cursor lê este perfil.")
                 .font(.callout)
                 .foregroundStyle(.secondary)
         }
         .formStyle(.grouped)
         .padding(12)
+        .onAppear { profile = memory.profileText() }
+    }
+
+    private func writeProfile() -> String {
+        switch memory.saveProfile(profile) {
+        case .saved:
+            return "Gravado."
+        case .invalidJSON:
+            return "JSON inválido. O arquivo anterior ficou."
+        case .tooLarge:
+            return "Passou de 2 KB. O arquivo anterior ficou."
+        }
     }
 }

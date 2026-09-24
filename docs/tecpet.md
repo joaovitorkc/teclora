@@ -21,7 +21,7 @@ Arte: PNG pixelado em `Teclora/Tecpet/Art/{id}.png` (quadrado). Sem texto na ima
 - **Overlay:** `NSPanel` pequeno, sempre no espaço ativo, cantos: topLeading, topTrailing, bottomLeading, bottomTrailing (padding da menubar/dock). Arrastar = gruda no canto mais próximo. Clique = abre chat. Clique direito = menu (silenciar, esconder, settings).
 - **Menu bar:** opção de **só** o pet na status item (retrato 18 pt) em vez do ícone Teclora, ou os dois (setting).
 - **Chat:** painel ao lado do pet ou ancorado no launcher. Campo de texto, histórico da sessão visível, Enter envia. Esc fecha o chat; o pet pode continuar visível.
-- **Wake:** `wakeName` (default = nome da espécie). Se “responder ao chamar” = on, digitar o wake no launcher abre o chat já com foco. Atalho global opcional (KeyboardShortcuts), default desligado para não brigar com Option+Space.
+- **Wake:** `wakeName` (default = nome da espécie). Se “responder ao chamar” = on, digitar o wake no launcher abre o chat já com foco. Sem microfone: `SFSpeechRecognizer` on-device foi pulado (permissão de fala + ditado, não wake word).
 
 ## Memória (`Application Support/Teclora/tecpet/`)
 
@@ -115,7 +115,8 @@ Sem filesystem genérico, sem shell, sem `Task`/subagent.
 
 - Aba **Cursor** nas Preferências: campo de key (SecureField), testar (`Me`), picker de modelo, estado do bridge (baixado / hash / erro), placeholder GPT/Claude.
 - Chat: se não houver key, balloon da F4. Com key: envia, mostra resposta, não trava o overlay se o bridge falhar.
-- Indicador de tokens estimado fica para F6 se estourar o teto 350.
+- Indicador no chat: caracteres do texto do Send ÷ 4. Rótulo diz que é estimado e que o schema das tools fica de fora. Não é o uso faturado.
+- Aba Tecpet: editor de `profile.json`. Só grava se for JSON e couber em 2 KB; senão o arquivo anterior fica.
 
 ### Arquivos sugeridos (cada um ≤350)
 

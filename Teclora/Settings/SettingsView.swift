@@ -35,7 +35,7 @@ struct SettingsView: View {
                 .tag(SettingsTab.cursor)
         }
         .tabViewStyle(.automatic)
-        .frame(width: 520, height: 440)
+        .frame(width: 520, height: 520)
     }
 }
 

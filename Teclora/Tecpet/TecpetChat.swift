@@ -40,9 +40,12 @@ final class TecpetChatController {
     }
 
     private func makePanel() -> NSPanel {
-        let host = NSHostingController(rootView: TecpetChatView(model: model, onSubmit: { [weak self] in
-            self?.submit()
-        }))
+        let host = NSHostingController(rootView: TecpetChatView(
+            model: model,
+            store: store,
+            brain: brain,
+            onSubmit: { [weak self] in self?.submit() }
+        ))
         let panel = NSPanel(contentViewController: host)
         panel.title = store.wakeName.isEmpty ? "Tecpet" : store.wakeName
         panel.styleMask = [.titled, .closable]
@@ -128,6 +131,8 @@ final class TecpetChatModel {
 
 private struct TecpetChatView: View {
     @Bindable var model: TecpetChatModel
+    var store: TecpetStore
+    var brain: TecpetBrain
     let onSubmit: () -> Void
     @FocusState private var focused: Bool
 
@@ -146,6 +151,11 @@ private struct TecpetChatView: View {
                 }
                 .padding(12)
             }
+            Text(budget)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 12)
             TextField("Falar com o pet", text: $model.draft)
                 .textFieldStyle(.roundedBorder)
                 .focused($focused)
@@ -154,5 +164,10 @@ private struct TecpetChatView: View {
         }
         .onChange(of: model.focus) { focused = true }
         .onAppear { focused = true }
+    }
+
+    private var budget: String {
+        let count = brain.estimatedTokens(persona: store.species?.persona ?? "", draft: model.draft)
+        return "≈ \(count) tokens no texto (estimado, 4 caracteres = 1). Schema das tools à parte."
     }
 }

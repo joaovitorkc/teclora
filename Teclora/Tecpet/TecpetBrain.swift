@@ -45,7 +45,7 @@ final class TecpetBrain {
                 token: ready.token,
                 service: "SdkAgentService",
                 method: "Send",
-                body: ["agentId": agentId, "message": ["text": prompt(persona: persona, user: text)]]
+                body: ["agentId": agentId, "message": ["text": memory.prompt(persona: persona, user: text)]]
             )
             _ = try? await CursorConnect.unary(
                 base: ready.url,
@@ -74,6 +74,10 @@ final class TecpetBrain {
         )
         let items = response["items"] as? [[String: Any]] ?? []
         return items.compactMap { $0["id"] as? String }
+    }
+
+    func estimatedTokens(persona: String, draft: String) -> Int {
+        memory.estimatedTokens(persona: persona, draft: draft)
     }
 
     func me(apiKey: String) async throws -> String {
@@ -119,22 +123,6 @@ final class TecpetBrain {
                 "customTools": TecpetTools.definitions(),
             ],
         ]
-    }
-
-    private func prompt(persona: String, user: String) -> String {
-        let turns = memory.recentTurns().map { "\($0.role): \($0.text)" }.joined(separator: "\n")
-        return """
-        \(persona)
-        Perfil:
-        \(memory.profileText())
-        Resumo:
-        \(memory.summaryText())
-        Últimas falas:
-        \(turns)
-        Fala atual:
-        \(user)
-        Use só as custom tools. Ação destrutiva espera o Swift confirmar.
-        """
     }
 
     private static func assistantText(_ messages: [[String: Any]]) -> String {

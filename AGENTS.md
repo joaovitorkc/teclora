@@ -10,11 +10,11 @@ Não aplicar `wi-iniciar-produto` (Next/Nest, `users` / `user_accesses`, portas)
 
 ## Recorte atual
 
-Atalho **Option+Space** → painel. Apps, clipboard, snippets, calculadora, comandos de sistema, quicklinks, arquivos (Spotlight) e janelas. Barra de menu: clique abre/fecha; menu Teclora, Preferências, Sair. Sem ícone no Dock (`LSUIElement`).
+Atalho **Option+Space** → painel. Apps, clipboard, snippets, calculadora, comandos de sistema, quicklinks, arquivos (Spotlight) e janelas. Barra de menu: clique abre/fecha; menu Teclora, Tecpet, Preferências, Sair. Sem ícone no Dock (`LSUIElement`).
 
-Módulo **Tecpet** (mascote + Cursor): spec em [docs/tecpet.md](docs/tecpet.md). Profundidade: [docs/profundidade.md](docs/profundidade.md).
+Módulo **Tecpet** (mascote + Cursor): overlay, chat, memória em `tecpet/`. O chat mostra um orçamento **estimado** (caracteres do texto do Send ÷ 4; o schema das tools fica de fora). A aba Tecpet edita `profile.json` (JSON, teto 2 KB). Spec em [docs/tecpet.md](docs/tecpet.md). Profundidade: [docs/profundidade.md](docs/profundidade.md).
 
-Cursor entra só pelo bridge local (key no Keychain). Fora: loja, Sparkle, sandbox App Store, notarização, Windows, outros LLMs.
+Cursor entra só pelo bridge local (key no Keychain). Wake é o nome digitado no launcher. **Sem** `SFSpeechRecognizer`: ditado pede microfone e reconhecimento de fala, e não é wake word. Fora: loja, Sparkle, sandbox App Store, notarização, Windows, GPT, Claude, cloud agent.
 
 ## Mapa
 

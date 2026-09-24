@@ -5,6 +5,12 @@ struct TecpetTurn: Codable {
     var text: String
 }
 
+enum ProfileWrite {
+    case saved
+    case invalidJSON
+    case tooLarge
+}
+
 /// profile.json (2 KB), summary.md (~1500), turns.jsonl (até 12). Sem chamada extra ao modelo.
 @MainActor
 final class TecpetMemory {
@@ -29,6 +35,46 @@ final class TecpetMemory {
 
     func recentTurns(limit: Int = 6) -> [TecpetTurn] {
         Array(loadTurns().suffix(limit))
+    }
+
+    /// O mesmo texto do Send. A contagem da UI é este texto ÷ 4, não o uso faturado.
+    func prompt(persona: String, user: String) -> String {
+        let turns = recentTurns().map { "\($0.role): \($0.text)" }.joined(separator: "\n")
+        return """
+        \(persona)
+        Perfil:
+        \(profileText())
+        Resumo:
+        \(summaryText())
+        Últimas falas:
+        \(turns)
+        Fala atual:
+        \(user)
+        Use só as custom tools. Ação destrutiva espera o Swift confirmar.
+        """
+    }
+
+    func estimatedTokens(persona: String, draft: String) -> Int {
+        max(1, prompt(persona: persona, user: draft).count / 4)
+    }
+
+    func saveProfile(_ text: String) -> ProfileWrite {
+        guard let data = text.data(using: .utf8),
+              (try? JSONSerialization.jsonObject(with: data)) != nil else {
+            TecloraLog.error("profile.json rejeitado: JSON inválido")
+            return .invalidJSON
+        }
+        guard data.count <= 2048 else {
+            TecloraLog.error("profile.json rejeitado: passou de 2 KB")
+            return .tooLarge
+        }
+        do {
+            try data.write(to: root.appendingPathComponent("profile.json"), options: .atomic)
+            return .saved
+        } catch {
+            TecloraLog.error("profile.json não gravou")
+            return .invalidJSON
+        }
     }
 
     func record(user: String, pet: String) {

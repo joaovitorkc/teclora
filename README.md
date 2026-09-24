@@ -1,6 +1,6 @@
 # Teclora
 
-Launcher nativo para Mac (Tahoe). Option+Space abre o painel; a barra de menu abre o mesmo painel. Busca apps e o histórico local de clipboard. Profundidade: [docs/profundidade.md](docs/profundidade.md). Tecpet: [docs/tecpet.md](docs/tecpet.md).
+Launcher nativo para Mac (Tahoe). Option+Space abre o painel; a barra de menu abre o mesmo painel. Busca apps, clipboard, snippets, quicklinks, arquivos e janelas. Profundidade: [docs/profundidade.md](docs/profundidade.md). Tecpet: [docs/tecpet.md](docs/tecpet.md).
 
 Não é app web. Não tem servidor, login nem porta HTTP.
 
@@ -16,7 +16,7 @@ Conta Apple Developer **não** é necessária para Run local.
 1. Abra `Teclora.xcodeproj`.
 2. Scheme **Teclora**, destino **My Mac**.
 3. Run (⌘R). O app fica invisível no Dock (agente) e aparece na barra de menu.
-4. **Option+Space**, ou um clique no ícone da barra, abre o painel. O clique direito nesse ícone abre Teclora, Preferências e Sair. Digite para filtrar. Enter abre o app, copia o clipboard ou abre Preferências. Esc fecha.
+4. **Option+Space**, ou um clique no ícone da barra, abre o painel. O clique direito nesse ícone abre Teclora, Tecpet, Preferências e Sair. Digite para filtrar. Enter abre o app, copia o clipboard, cola um snippet ou abre Preferências. Esc fecha.
 
 Sair: comando **Sair do Teclora**, ou **Sair** no menu da barra.
 
@@ -26,13 +26,15 @@ Sair: comando **Sair do Teclora**, ou **Sair** no menu da barra.
 |-------|------|
 | ↑ ↓ · ⌃N ⌃P · Tab | Mover seleção |
 | Page Up / Page Down | Pular 8 itens |
-| ↵ | Abrir app, copiar clipboard ou abrir Preferências |
-| ⌘↵ | No app: mostrar no Finder. No clipboard: fixar |
+| ↵ | Abrir app, arquivo ou janela; copiar clipboard ou snippet; abrir Preferências |
+| ⌘↵ | No app ou arquivo: mostrar no Finder. No clipboard: fixar |
 | ⌘⌫ | Apagar o item de clipboard selecionado |
 | ⌘1…⌘9 | Abrir o item N (segure ⌘ para ver os números) |
 | Esc | Limpa a busca; com a busca vazia, fecha |
 
-A busca aceita prefixo, início de palavra, iniciais (`vsc` → Visual Studio Code), nome do arquivo em inglês (`calculator` acha "Calculadora") e fuzzy. Apps que você abre mais sobem na lista e aparecem em **Recentes**. Texto copiado entra em **Clipboard**; a busca casa o conteúdo. Preferências (Geral e Clipboard) ficam em `~/Library/Application Support/Teclora/`. O clipboard não sai do Mac.
+A busca aceita prefixo, início de palavra, iniciais (`vsc` → Visual Studio Code), nome do arquivo em inglês (`calculator` acha "Calculadora") e fuzzy. Apps que você abre mais sobem na lista e aparecem em **Recentes**. Texto copiado entra em **Clipboard**; a busca casa o conteúdo. Preferências (Geral, Clipboard, Snippets, Quicklinks, Tecpet, Cursor) ficam em `~/Library/Application Support/Teclora/`. O clipboard não sai do Mac.
+
+O chat do Tecpet mostra `≈ N tokens no texto`: é o tamanho do prompt (persona, perfil, resumo, últimas 6 falas, rascunho) dividido por 4. Não é a conta da API. O schema das tools não entra nesse número. Em Tecpet → “O que o pet sabe” dá para ver e gravar o `profile.json`.
 
 ## Build na linha de comando
 
@@ -63,8 +65,8 @@ Repo único (`github.com/joaovitorkc/teclora`). Sem servidor na VM. Passo a pass
 - Histórico de clipboard (texto): gravar, tamanho máximo, fixar, copiar de volta, apagar
 - Snippets, calculadora, comandos de sistema e quicklinks
 - Arquivos via Spotlight (Enter abre, ⌘Enter revela) e janelas (focar; esquerda, direita, maximizar, centro)
-- Preferências: Geral, Clipboard, Snippets, Quicklinks
+- Preferências: Geral, Clipboard, Snippets, Quicklinks, Tecpet, Cursor
+- Tecpet: overlay, chat, memória local. Cursor só pelo bridge darwin-arm64 e key no Keychain. Sem key, o chat continua no balão e ainda abre app (“abrir Safari”).
+- Orçamento de tokens estimado no chat e editor do `profile.json` (JSON, 2 KB)
 
-- Tecpet com Cursor local: Keychain, bridge darwin-arm64, seis tools. Sem key, o chat continua no balão.
-
-Fora: GPT, Claude e cloud agent. Sem loja, Sparkle ou sandbox App Store.
+Fora de propósito: voz (`SFSpeechRecognizer` — pede microfone e não é wake word; o wake continua sendo o nome digitado no launcher), GPT, Claude, cloud agent, segunda chamada de modelo para resumir. Sem loja, Sparkle ou sandbox App Store.
