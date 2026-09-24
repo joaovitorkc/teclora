@@ -19,6 +19,12 @@ final class FileProvider: CommandProvider {
 
     init() {
         query.searchScopes = [NSMetadataQueryUserHomeScope, NSMetadataQueryLocalComputerScope]
+        query.valueListAttributes = [
+            NSMetadataItemPathKey,
+            NSMetadataItemDisplayNameKey,
+            NSMetadataItemFSNameKey,
+            NSMetadataItemFSContentChangeDateKey,
+        ]
         query.notificationBatchingInterval = 0.3
     }
 

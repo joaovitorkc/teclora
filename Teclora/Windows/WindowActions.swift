@@ -1,6 +1,7 @@
 import AppKit
 import ApplicationServices
 
+@MainActor
 extension WindowPlacement {
     var id: String {
         switch self {
