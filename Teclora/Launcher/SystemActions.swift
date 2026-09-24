@@ -18,15 +18,17 @@ enum SystemActions {
         run("/usr/bin/pmset", ["sleepnow"])
     }
 
-    static func confirmEmptyTrash() {
+    @discardableResult
+    static func confirmEmptyTrash() -> Bool {
         let alert = NSAlert()
         alert.messageText = "Esvaziar o Lixo?"
         alert.informativeText = "Os itens do Lixo serão apagados."
         alert.alertStyle = .warning
         alert.addButton(withTitle: "Esvaziar")
         alert.addButton(withTitle: "Cancelar")
-        guard alert.runModal() == .alertFirstButtonReturn else { return }
+        guard alert.runModal() == .alertFirstButtonReturn else { return false }
         runAppleScript("tell application \"Finder\" to empty trash")
+        return true
     }
 
     static func toggleMute() {

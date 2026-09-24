@@ -33,13 +33,16 @@ enum CursorConnect {
         body: [String: Any],
         stream: Bool
     ) async throws -> Data {
-        let url = base.appendingPathComponent("sdk.v1.\(service)/\(method)")
+        let url = base
+            .appendingPathComponent("sdk.v1.\(service)")
+            .appendingPathComponent(method)
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
         request.setValue("1", forHTTPHeaderField: "Connect-Protocol-Version")
         request.setValue(stream ? "application/connect+json" : "application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        let payload = try JSONSerialization.data(withJSONObject: body)
+        request.httpBody = stream ? frame(payload) : payload
         let (data, response) = try await URLSession.shared.data(for: request)
         let code = (response as? HTTPURLResponse)?.statusCode ?? 0
         guard (200..<300).contains(code) else {
@@ -50,14 +53,24 @@ enum CursorConnect {
     }
 
     /// Envelope Connect: 1 byte de flags + 4 bytes de tamanho + JSON.
+    static func frame(_ payload: Data) -> Data {
+        var data = Data([0])
+        var length = UInt32(payload.count).bigEndian
+        withUnsafeBytes(of: &length) { data.append(contentsOf: $0) }
+        data.append(payload)
+        return data
+    }
+
     static func parseEnvelopes(_ data: Data) -> [[String: Any]] {
         var messages: [[String: Any]] = []
         var offset = 0
         while offset + 5 <= data.count {
             let flags = data[offset]
-            let length = data.subdata(in: (offset + 1)..<(offset + 5)).withUnsafeBytes {
-                Int(UInt32(bigEndian: $0.load(as: UInt32.self)))
-            }
+            let lengthBytes = [UInt8](data[(offset + 1)..<(offset + 5)])
+            let length = Int(UInt32(lengthBytes[0]) << 24
+                | UInt32(lengthBytes[1]) << 16
+                | UInt32(lengthBytes[2]) << 8
+                | UInt32(lengthBytes[3]))
             offset += 5
             guard length >= 0, offset + length <= data.count else { break }
             let payload = data.subdata(in: offset..<(offset + length))

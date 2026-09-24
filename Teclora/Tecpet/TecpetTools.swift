@@ -114,7 +114,7 @@ enum TecpetTools {
             guard confirm("Colocar o Mac para dormir?") else { return ["ok": false, "cancelled": true] }
             SystemActions.sleep()
         case "emptyTrash":
-            SystemActions.confirmEmptyTrash()
+            guard SystemActions.confirmEmptyTrash() else { return ["ok": false, "cancelled": true] }
         case "uuid":
             return ["ok": true, "value": UUID().uuidString]
         case "datetime":

@@ -20,7 +20,9 @@ enum CursorLayout {
     }
 
     static func binary() -> URL? {
-        bridgeDirectory()?.appendingPathComponent("bin/cursor-sdk-bridge")
+        bridgeDirectory()?
+            .appendingPathComponent("bin", isDirectory: true)
+            .appendingPathComponent("cursor-sdk-bridge")
     }
 
     static func sandbox() -> URL? {
@@ -35,7 +37,8 @@ enum CursorLayout {
 
     static func stateRoot() -> URL? {
         guard let dir = AppSupport.directory()?
-            .appendingPathComponent("bridge/state", isDirectory: true) else { return nil }
+            .appendingPathComponent("bridge", isDirectory: true)
+            .appendingPathComponent("state", isDirectory: true) else { return nil }
         try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
         return dir
     }

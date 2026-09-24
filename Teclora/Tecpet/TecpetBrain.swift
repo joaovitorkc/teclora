@@ -140,10 +140,13 @@ final class TecpetBrain {
     private static func assistantText(_ messages: [[String: Any]]) -> String {
         var text = ""
         for message in messages {
-            if let result = message["result"] as? [String: Any],
-               let inner = result["result"] as? [String: Any],
-               let value = inner["result"] as? String, !value.isEmpty {
-                text = value
+            if let result = message["result"] as? [String: Any] {
+                if let inner = result["result"] as? [String: Any],
+                   let value = inner["result"] as? String, !value.isEmpty {
+                    text = value
+                } else if let value = result["result"] as? String, !value.isEmpty {
+                    text = value
+                }
             }
         }
         return text

@@ -46,6 +46,18 @@ final class CursorBridge {
         stderrTask = Task.detached {
             _ = try? handle.readToEnd()
         }
+        do {
+            _ = try await CursorConnect.unary(
+                base: parsed.url,
+                token: parsed.token,
+                service: "SdkBridgeControlService",
+                method: "Ping",
+                body: [:]
+            )
+        } catch {
+            shutdown()
+            throw CursorBridgeError.handshake
+        }
         TecloraLog.info("Bridge pronto")
         return parsed
     }

@@ -7,6 +7,7 @@ final class CursorToolServer {
     let token = UUID().uuidString
     private(set) var url: URL?
     private var listener: NWListener?
+    private var startContinuation: CheckedContinuation<URL, Error>?
     private let execute: @MainActor (String, [String: Any]) -> [String: Any]
 
     init(execute: @escaping @MainActor (String, [String: Any]) -> [String: Any]) {
@@ -23,19 +24,31 @@ final class CursorToolServer {
             }
         }
         self.listener = listener
-        return try await withCheckedThrowingContinuation { continuation in
-            listener.stateUpdateHandler = { state in
-                if case .ready = state {
-                    let port = listener.port?.rawValue ?? 0
-                    let url = URL(string: "http://127.0.0.1:\(port)")!
-                    self.url = url
-                    continuation.resume(returning: url)
-                }
-                if case .failed = state {
-                    continuation.resume(throwing: CursorBridgeError.spawn)
+        return try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<URL, Error>) in
+            self.startContinuation = continuation
+            listener.stateUpdateHandler = { [weak self] state in
+                Task { @MainActor in
+                    self?.handleListener(state)
                 }
             }
             listener.start(queue: .main)
+        }
+    }
+
+    private func handleListener(_ state: NWListener.State) {
+        guard let continuation = startContinuation else { return }
+        switch state {
+        case .ready:
+            let port = listener?.port?.rawValue ?? 0
+            let url = URL(string: "http://127.0.0.1:\(port)")!
+            self.url = url
+            startContinuation = nil
+            continuation.resume(returning: url)
+        case .failed:
+            startContinuation = nil
+            continuation.resume(throwing: CursorBridgeError.spawn)
+        default:
+            break
         }
     }
 
@@ -71,7 +84,13 @@ final class CursorToolServer {
         } else if let length = Self.contentLength(head), bodyText.utf8.count < length {
             return nil
         }
-        let authorized = head.contains("Authorization: Bearer \(token)")
+        let authorized = head.split(separator: "\r\n").contains { line in
+            let parts = line.split(separator: ":", maxSplits: 1)
+            guard parts.count == 2 else { return false }
+            let name = parts[0].trimmingCharacters(in: .whitespaces).lowercased()
+            let value = parts[1].trimmingCharacters(in: .whitespaces)
+            return name == "authorization" && value == "Bearer \(token)"
+        }
         var result: [String: Any] = ["ok": false, "error": "unauthorized"]
         if authorized,
            let body = bodyText.data(using: .utf8),

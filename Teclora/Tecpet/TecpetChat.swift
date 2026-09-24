@@ -7,7 +7,7 @@ struct ChatLine: Identifiable, Equatable {
     let text: String
 }
 
-/// Conversa da sessão, sem modelo. "abrir …" reusa o router dos apps.
+/// Conversa da sessão. Sem key, vira bloco de notas + "abrir …".
 @MainActor
 final class TecpetChatController {
     private let store: TecpetStore
