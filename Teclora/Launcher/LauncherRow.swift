@@ -25,15 +25,23 @@ struct LauncherRow: View {
         HStack(spacing: 12) {
             icon
                 .frame(width: TecloraChrome.iconSize, height: TecloraChrome.iconSize)
-            Text(item.title)
-                .font(.system(size: 14))
-                .foregroundStyle(.primary)
-                .lineLimit(1)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(item.title)
+                    .font(.system(size: 14))
+                    .foregroundStyle(.primary)
+                    .lineLimit(1)
+                if let subtitle = item.subtitle {
+                    Text(subtitle)
+                        .font(.system(size: 11))
+                        .foregroundStyle(.secondary)
+                        .lineLimit(1)
+                }
+            }
             Spacer(minLength: 12)
             trailing
         }
         .padding(.horizontal, 10)
-        .frame(height: TecloraChrome.rowHeight)
+        .frame(minHeight: TecloraChrome.rowHeight)
         .background {
             if isSelected {
                 RoundedRectangle(cornerRadius: TecloraChrome.rowCorner, style: .continuous)
@@ -55,8 +63,8 @@ struct LauncherRow: View {
             Text("Aberto")
                 .font(.system(size: 11))
                 .foregroundStyle(.tertiary)
-        } else if case .quit = item {
-            Text("Comando")
+        } else if case .clipboard(_, true) = item.kind {
+            Text("Fixado")
                 .font(.system(size: 11))
                 .foregroundStyle(.tertiary)
         }
@@ -64,17 +72,23 @@ struct LauncherRow: View {
 
     @ViewBuilder
     private var icon: some View {
-        switch item {
+        switch item.kind {
         case .application(let app):
             Image(nsImage: AppIconCache.icon(for: app))
                 .resizable()
                 .interpolation(.high)
-        case .quit:
-            Image(systemName: "power")
-                .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(.secondary)
-                .frame(width: 26, height: 26)
-                .background(TecloraChrome.platterFill, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
+        case .clipboard:
+            symbol("doc.on.clipboard")
+        case .command(let name):
+            symbol(name)
         }
+    }
+
+    private func symbol(_ name: String) -> some View {
+        Image(systemName: name)
+            .font(.system(size: 12, weight: .medium))
+            .foregroundStyle(.secondary)
+            .frame(width: 26, height: 26)
+            .background(TecloraChrome.platterFill, in: RoundedRectangle(cornerRadius: 7, style: .continuous))
     }
 }

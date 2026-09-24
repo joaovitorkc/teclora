@@ -10,11 +10,11 @@ Não aplicar `wi-iniciar-produto` (Next/Nest, `users` / `user_accesses`, portas)
 
 ## Recorte atual
 
-Atalho **Option+Space** → painel. Apps + comandos locais (em construção: clipboard, snippets, arquivos, janelas, sistema). Sem ícone no Dock (`LSUIElement`); **sim** barra de menu. Sair pelo comando ou pelo menu.
+Atalho **Option+Space** → painel. Apps, histórico de clipboard (texto) e preferências. Barra de menu: clique abre/fecha; menu Teclora, Preferências, Sair. Sem ícone no Dock (`LSUIElement`).
 
 Módulo **Tecpet** (mascote + Cursor): spec em [docs/tecpet.md](docs/tecpet.md). Profundidade: [docs/profundidade.md](docs/profundidade.md).
 
-Fora: loja, Sparkle, sandbox App Store, notarização, Windows, LLM que não seja Cursor.
+Fora ainda: snippets, arquivos, janelas, Tecpet (overlay e IA). Também fora: loja, Sparkle, sandbox App Store, notarização, Windows, LLM que não seja Cursor.
 
 ## Mapa
 
@@ -25,7 +25,11 @@ Fora: loja, Sparkle, sandbox App Store, notarização, Windows, LLM que não sej
 | `Teclora/Hotkey/` | Option+Space via KeyboardShortcuts |
 | `Teclora/Launcher/` | `NSPanel` + SwiftUI busca/lista |
 | `Teclora/Catalog/` | Enumeração de `.app` + filtro |
-| `Teclora/Tecpet/` | Espécies + arte pixel (`Art/`, `species.json`) |
+| `Teclora/Support/` | `TecloraLog` (`os.Logger`, `app.teclora`) e Application Support |
+| `Teclora/Clipboard/` | Histórico local de texto; poll de `changeCount` |
+| `Teclora/Settings/` | Janela Geral + Clipboard |
+| `Teclora/Menu/` | `NSStatusItem` template |
+| `Teclora/Tecpet/` | Espécies + arte pixel (`Art/`, `species.json`) — ainda sem overlay |
 | `docs/profundidade.md` | Launcher Raycast-like + regras Cursor/tokens |
 | `docs/tecpet.md` | Cinco pets, memória, permissões |
 | `.swiftlint.yml` | Gates: teto 350 linhas, sem `print`/`NSLog` diretos |

@@ -1,6 +1,6 @@
 # Teclora
 
-Launcher nativo para Mac (Tahoe). Option+Space, apps, clipboard e barra de menu; profundidade em [docs/profundidade.md](docs/profundidade.md). Tecpet: [docs/tecpet.md](docs/tecpet.md).
+Launcher nativo para Mac (Tahoe). Option+Space abre o painel; a barra de menu abre o mesmo painel. Busca apps e o histórico local de clipboard. Profundidade: [docs/profundidade.md](docs/profundidade.md). Tecpet: [docs/tecpet.md](docs/tecpet.md).
 
 Não é app web. Não tem servidor, login nem porta HTTP.
 
@@ -15,10 +15,10 @@ Conta Apple Developer **não** é necessária para Run local.
 
 1. Abra `Teclora.xcodeproj`.
 2. Scheme **Teclora**, destino **My Mac**.
-3. Run (⌘R). O app fica invisível no Dock (agente).
-4. **Option+Space** abre o painel. Digite para filtrar, Enter abre, Esc fecha.
+3. Run (⌘R). O app fica invisível no Dock (agente) e aparece na barra de menu.
+4. **Option+Space**, ou um clique no ícone da barra, abre o painel. O clique direito nesse ícone abre Teclora, Preferências e Sair. Digite para filtrar. Enter abre o app, copia o clipboard ou abre Preferências. Esc fecha.
 
-Sair: na lista, escolha **Sair do Teclora**.
+Sair: comando **Sair do Teclora**, ou **Sair** no menu da barra.
 
 ### Atalhos no painel
 
@@ -26,12 +26,13 @@ Sair: na lista, escolha **Sair do Teclora**.
 |-------|------|
 | ↑ ↓ · ⌃N ⌃P · Tab | Mover seleção |
 | Page Up / Page Down | Pular 8 itens |
-| ↵ | Abrir |
-| ⌘↵ | Mostrar no Finder |
+| ↵ | Abrir app, copiar clipboard ou abrir Preferências |
+| ⌘↵ | No app: mostrar no Finder. No clipboard: fixar |
+| ⌘⌫ | Apagar o item de clipboard selecionado |
 | ⌘1…⌘9 | Abrir o item N (segure ⌘ para ver os números) |
 | Esc | Limpa a busca; com a busca vazia, fecha |
 
-A busca aceita prefixo, início de palavra, iniciais (`vsc` → Visual Studio Code), nome do arquivo em inglês (`calculator` acha "Calculadora") e fuzzy. Apps que você abre mais sobem na lista e aparecem em **Recentes**.
+A busca aceita prefixo, início de palavra, iniciais (`vsc` → Visual Studio Code), nome do arquivo em inglês (`calculator` acha "Calculadora") e fuzzy. Apps que você abre mais sobem na lista e aparecem em **Recentes**. Texto copiado entra em **Clipboard**; a busca casa o conteúdo. Preferências (Geral e Clipboard) ficam em `~/Library/Application Support/Teclora/`. O clipboard não sai do Mac.
 
 ## Build na linha de comando
 
@@ -57,7 +58,9 @@ Repo único (`github.com/joaovitorkc/teclora`). Sem servidor na VM. Passo a pass
 
 ## Recorte — o que entra
 
-- Option+Space (não substitui o Spotlight)
+- Option+Space (não substitui o Spotlight) e ícone template na barra de menu
 - Catálogo em `/Applications`, `/System/Applications`, `~/Applications`
-- Barra de menu + clipboard (F1). Snippets, arquivos, janelas, Tecpet: na fila da profundidade
-- Sem loja, Sparkle ou sandbox App Store
+- Histórico de clipboard (texto): gravar, tamanho máximo, fixar, copiar de volta, apagar
+- Preferências: abas Geral e Clipboard
+
+Fora ainda: snippets, arquivos, janelas, Tecpet (overlay e IA). Sem loja, Sparkle ou sandbox App Store.

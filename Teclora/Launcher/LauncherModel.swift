@@ -1,11 +1,6 @@
 import AppKit
 import Observation
 
-enum LauncherAction {
-    case open
-    case revealInFinder
-}
-
 @MainActor
 @Observable
 final class LauncherModel {
@@ -28,11 +23,17 @@ final class LauncherModel {
     var pointerSelectionEnabled = false
     var focusToken = 0
 
-    @ObservationIgnored var onConfirm: ((LauncherItem, LauncherAction) -> Void)?
+    @ObservationIgnored var onConfirm: ((LauncherItem, Bool) -> Void)?
     @ObservationIgnored var onCancel: (() -> Void)?
-    @ObservationIgnored let history = LaunchHistory()
+    @ObservationIgnored let history: LaunchHistory
+    @ObservationIgnored private let providers: [CommandProvider]
     @ObservationIgnored private var apps: [InstalledApp] = []
     @ObservationIgnored private var refreshTask: Task<Void, Never>?
+
+    init(history: LaunchHistory, providers: [CommandProvider]) {
+        self.history = history
+        self.providers = providers
+    }
 
     var selectedItem: LauncherItem? {
         items.indices.contains(selectedIndex) ? items[selectedIndex] : nil
@@ -78,9 +79,9 @@ final class LauncherModel {
         }
     }
 
-    func confirmSelection(_ action: LauncherAction = .open) {
+    func confirmSelection(alternate: Bool = false) {
         guard let item = selectedItem else { return }
-        onConfirm?(item, action)
+        onConfirm?(item, alternate)
     }
 
     func confirm(at index: Int) {
@@ -98,8 +99,8 @@ final class LauncherModel {
         }
     }
 
-    func recordLaunch(of app: InstalledApp) {
-        history.record(app.id)
+    func refreshHits() {
+        recompute(resetSelection: false)
     }
 
     private func apply(_ fresh: [InstalledApp]) {
@@ -111,7 +112,12 @@ final class LauncherModel {
 
     private func recompute(resetSelection: Bool) {
         let previousID = selectedItem?.id
-        sections = AppSearch.sections(from: apps, query: query, history: history)
+        sections = SearchIndex.sections(
+            apps: apps,
+            query: query,
+            history: history,
+            providers: providers
+        )
         items = sections.flatMap(\.items)
         if !resetSelection, let previousID, let index = items.firstIndex(where: { $0.id == previousID }) {
             selectedIndex = index

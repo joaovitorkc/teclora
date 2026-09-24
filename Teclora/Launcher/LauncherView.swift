@@ -33,7 +33,7 @@ struct LauncherView: View {
                 .font(.system(size: 17, weight: .medium))
                 .foregroundStyle(.secondary)
 
-            TextField("Buscar aplicativos", text: $model.query)
+            TextField("Buscar", text: $model.query)
                 .textFieldStyle(.plain)
                 .font(.system(size: 20))
                 .focused($searchFocused)
@@ -140,7 +140,7 @@ struct LauncherView: View {
     }
 
     private func isRunning(_ item: LauncherItem) -> Bool {
-        guard case .application(let app) = item else { return false }
+        guard case .application(let app) = item.kind else { return false }
         return model.runningPaths.contains(app.id)
     }
 
@@ -173,12 +173,17 @@ struct LauncherView: View {
 
     @ViewBuilder
     private var footerActions: some View {
-        switch model.selectedItem {
-        case .application:
+        switch model.selectedItem?.action {
+        case .openApp:
             hint("Abrir", keys: ["↵"], emphasized: !model.commandHeld)
             hint("Mostrar no Finder", keys: ["⌘", "↵"], emphasized: model.commandHeld)
+        case .copyClipboard:
+            hint("Copiar", keys: ["↵"], emphasized: !model.commandHeld)
+            hint("Fixar", keys: ["⌘", "↵"], emphasized: model.commandHeld)
         case .quit:
             hint("Sair", keys: ["↵"], emphasized: true)
+        case .openSettings:
+            hint("Abrir", keys: ["↵"], emphasized: true)
         case nil:
             hint("Limpar busca", keys: ["esc"], emphasized: true)
         }

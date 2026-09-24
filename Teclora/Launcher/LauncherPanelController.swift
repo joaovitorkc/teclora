@@ -8,7 +8,7 @@ final class LauncherPanel: NSPanel {
 
 @MainActor
 final class LauncherPanelController: NSObject, NSWindowDelegate {
-    private let model = LauncherModel()
+    private let model: LauncherModel
     private let panel: LauncherPanel
     private var previousApp: NSRunningApplication?
     private var localMonitors: [Any] = []
@@ -16,7 +16,8 @@ final class LauncherPanelController: NSObject, NSWindowDelegate {
     private var ignoringResign = false
     private var isHiding = false
 
-    override init() {
+    init(model: LauncherModel) {
+        self.model = model
         panel = LauncherPanel(
             contentRect: NSRect(x: 0, y: 0, width: TecloraChrome.panelWidth, height: TecloraChrome.panelHeight),
             styleMask: [.titled, .fullSizeContentView],
@@ -48,8 +49,8 @@ final class LauncherPanelController: NSObject, NSWindowDelegate {
         hosting.sizingOptions = []
         panel.contentView = GlassBackdrop.wrap(hosting, cornerRadius: TecloraChrome.corner)
 
-        model.onConfirm = { [weak self] item, action in
-            self?.perform(item, action: action)
+        model.onConfirm = { [weak self] item, alternate in
+            self?.perform(item, alternate: alternate)
         }
         model.onCancel = { [weak self] in
             self?.hide(restorePrevious: true)
@@ -105,6 +106,7 @@ final class LauncherPanelController: NSObject, NSWindowDelegate {
 
     func windowDidResignKey(_ notification: Notification) {
         guard !ignoringResign, panel.isVisible else { return }
+        if StatusItemController.isCurrentEventOnButton() { return }
         hide(restorePrevious: false)
     }
 
@@ -112,7 +114,9 @@ final class LauncherPanelController: NSObject, NSWindowDelegate {
         stopClickOutsideMonitor()
         clickMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] _ in
             DispatchQueue.main.async {
-                self?.hide(restorePrevious: false)
+                guard let self else { return }
+                if StatusItemController.isCurrentEventOnButton() { return }
+                self.hide(restorePrevious: false)
             }
         }
     }
@@ -171,7 +175,9 @@ final class LauncherPanelController: NSObject, NSWindowDelegate {
 
         switch code {
         case KeyCode.returnKey, KeyCode.enter:
-            model.confirmSelection(flags.contains(.command) ? .revealInFinder : .open)
+            model.confirmSelection(alternate: flags.contains(.command))
+        case KeyCode.delete, KeyCode.forwardDelete where flags == .command:
+            deleteSelectedClipboard()
         case KeyCode.down:
             model.moveSelection(1)
         case KeyCode.up:
@@ -188,17 +194,16 @@ final class LauncherPanelController: NSObject, NSWindowDelegate {
         return true
     }
 
-    private func perform(_ item: LauncherItem, action: LauncherAction) {
-        hide(restorePrevious: false)
-        switch (item, action) {
-        case (.application(let app), .open):
-            model.recordLaunch(of: app)
-            NSWorkspace.shared.open(app.url)
-        case (.application(let app), .revealInFinder):
-            NSWorkspace.shared.activateFileViewerSelecting([app.url])
-        case (.quit, _):
-            NSApp.terminate(nil)
-        }
+    var onPerform: ((LauncherItem, Bool) -> Void)?
+    var onDeleteClipboard: ((UUID) -> Void)?
+
+    private func perform(_ item: LauncherItem, alternate: Bool) {
+        onPerform?(item, alternate)
+    }
+
+    private func deleteSelectedClipboard() {
+        guard case .clipboard(let id, _) = model.selectedItem?.kind else { return }
+        onDeleteClipboard?(id)
     }
 
     private func activatePrevious() {
@@ -234,6 +239,8 @@ private enum KeyCode {
     static let up: UInt16 = 126
     static let pageUp: UInt16 = 116
     static let pageDown: UInt16 = 121
+    static let delete: UInt16 = 51
+    static let forwardDelete: UInt16 = 117
     /// 1…9 na fileira de números.
     static let digits: [UInt16] = [18, 19, 20, 21, 23, 22, 26, 28, 25]
     /// ⌃N / ⌃P e ⌃J / ⌃K, como em editores e no Raycast.

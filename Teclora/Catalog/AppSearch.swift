@@ -16,17 +16,13 @@ enum AppSearch {
             let byID = Dictionary(apps.map { ($0.id, $0) }, uniquingKeysWith: { first, _ in first })
             let recents = history.mostRecent(limit: recentLimit).compactMap { byID[$0] }
             let recentIDs = Set(recents.map(\.id))
-            groups.append(("Recentes", recents.map(LauncherItem.application)))
+            groups.append(("Recentes", recents.map { LauncherItem.application($0, section: "Recentes") }))
             groups.append((
                 "Aplicativos",
-                apps.filter { !recentIDs.contains($0.id) }.map(LauncherItem.application)
+                apps.filter { !recentIDs.contains($0.id) }.map { LauncherItem.application($0, section: "Aplicativos") }
             ))
-            groups.append(("Comandos", [.quit]))
         } else {
             groups.append(("Aplicativos", rankedApps(apps, query: folded, history: history)))
-            if matchesQuit(folded) {
-                groups.append(("Comandos", [.quit]))
-            }
         }
 
         var sections: [LauncherSection] = []
@@ -60,7 +56,7 @@ enum AppSearch {
             if lhs.score != rhs.score { return lhs.score > rhs.score }
             return lhs.app.name.localizedStandardCompare(rhs.app.name) == .orderedAscending
         }
-        .map { LauncherItem.application($0.app) }
+        .map { LauncherItem.application($0.app, section: "Aplicativos") }
     }
 
     /// Menor é melhor. `nil` = não casa.
@@ -87,10 +83,5 @@ enum AppSearch {
             if remaining.isEmpty { return true }
         }
         return remaining.isEmpty
-    }
-
-    private static func matchesQuit(_ query: String) -> Bool {
-        ["sair do teclora", "quit teclora", "fechar teclora"]
-            .contains { matchRank(name: $0, query: query).map { $0 <= 4 } ?? false }
     }
 }

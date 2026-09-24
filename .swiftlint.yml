@@ -5,8 +5,8 @@
 # Pulada: quality/no-direct-data-access — este app não tem cliente de
 # banco/ORM; o prompt manda remover a regra em vez de inventar fronteira.
 #
-# Sem adaptador de log ainda: não há arquivo isento de no_direct_print.
-# Quando existir, exclua esse path na custom rule (não desligue a regra).
+# TecloraLog (os.Logger) é o adaptador. A regra segue ligada: o helper
+# não chama print, então não há exclusão de arquivo.
 
 only_rules:
   - file_length
