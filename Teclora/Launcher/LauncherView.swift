@@ -181,9 +181,17 @@ struct LauncherView: View {
             hint("Copiar", keys: ["↵"], emphasized: !model.commandHeld)
             hint("Fixar", keys: ["⌘", "↵"], emphasized: model.commandHeld)
             hint("Apagar", keys: ["⌘", "⌫"], emphasized: false)
+        case .copyText:
+            hint("Copiar", keys: ["↵"], emphasized: true)
         case .quit:
             hint("Sair", keys: ["↵"], emphasized: true)
-        case .openSettings:
+        case .openSettings, .newSnippet:
+            hint("Abrir", keys: ["↵"], emphasized: true)
+        case .lockScreen, .sleep, .toggleMute:
+            hint("Executar", keys: ["↵"], emphasized: true)
+        case .emptyTrash:
+            hint("Confirmar", keys: ["↵"], emphasized: true)
+        case .openTarget:
             hint("Abrir", keys: ["↵"], emphasized: true)
         case nil:
             hint("Limpar busca", keys: ["esc"], emphasized: true)

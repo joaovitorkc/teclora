@@ -3,8 +3,12 @@ import Foundation
 /// Funde o catálogo de apps com os providers e reusa o ranking de `AppSearch`.
 @MainActor
 enum SearchIndex {
-    private static let emptyOrder = ["Recentes", "Clipboard", "Comandos", "Aplicativos"]
-    private static let queryOrder = ["Aplicativos", "Clipboard", "Comandos"]
+    private static let emptyOrder = [
+        "Recentes", "Clipboard", "Snippets", "Quicklinks", "Comandos", "Aplicativos",
+    ]
+    private static let queryOrder = [
+        "Calculadora", "Aplicativos", "Clipboard", "Snippets", "Quicklinks", "Comandos",
+    ]
 
     static func sections(
         apps: [InstalledApp],

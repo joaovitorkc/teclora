@@ -9,7 +9,7 @@ enum ConfirmRouter {
         history: LaunchHistory,
         clipboard: ClipboardStore,
         closeLauncher: (_ restorePrevious: Bool) -> Void,
-        showSettings: () -> Void
+        showSettings: (SettingsTab) -> Void
     ) {
         if alternate, case .application(let app) = item.kind {
             closeLauncher(false)
@@ -36,8 +36,35 @@ enum ConfirmRouter {
             closeLauncher(false)
         case .openSettings:
             closeLauncher(false)
-            showSettings()
+            showSettings(.general)
+        case .copyText(let text):
+            copyToPasteboard(text)
+            closeLauncher(false)
+        case .newSnippet:
+            closeLauncher(false)
+            showSettings(.snippets)
+        case .lockScreen:
+            closeLauncher(false)
+            SystemActions.lockScreen()
+        case .sleep:
+            closeLauncher(false)
+            SystemActions.sleep()
+        case .emptyTrash:
+            closeLauncher(false)
+            SystemActions.confirmEmptyTrash()
+        case .toggleMute:
+            closeLauncher(false)
+            SystemActions.toggleMute()
+        case .openTarget(let target):
+            closeLauncher(false)
+            SystemActions.openTarget(target)
         }
+    }
+
+    private static func copyToPasteboard(_ text: String) {
+        let board = NSPasteboard.general
+        board.clearContents()
+        board.setString(text, forType: .string)
     }
 
     static func deleteClipboard(_ id: UUID, clipboard: ClipboardStore) {

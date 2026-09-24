@@ -6,15 +6,25 @@ final class SettingsWindowController {
     private let model: SettingsModel
     private var window: NSWindow?
 
-    init(settings: SettingsStore, clipboard: ClipboardStore) {
-        model = SettingsModel(settings: settings, clipboard: clipboard)
+    init(settings: SettingsStore, clipboard: ClipboardStore, snippets: SnippetStore, quicklinks: QuicklinkStore) {
+        model = SettingsModel(
+            settings: settings,
+            clipboard: clipboard,
+            snippets: snippets,
+            quicklinks: quicklinks
+        )
+    }
+
+    func show(_ tab: SettingsTab = .general) {
+        model.selectedTab = tab
+        present()
     }
 
     func noteDataChange() {
         model.noteChange()
     }
 
-    func show() {
+    private func present() {
         let window = window ?? makeWindow()
         self.window = window
         NSApp.activate(ignoringOtherApps: true)

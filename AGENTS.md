@@ -10,11 +10,11 @@ Não aplicar `wi-iniciar-produto` (Next/Nest, `users` / `user_accesses`, portas)
 
 ## Recorte atual
 
-Atalho **Option+Space** → painel. Apps, histórico de clipboard (texto) e preferências. Barra de menu: clique abre/fecha; menu Teclora, Preferências, Sair. Sem ícone no Dock (`LSUIElement`).
+Atalho **Option+Space** → painel. Apps, clipboard, snippets, calculadora, comandos de sistema (allowlist), quicklinks e preferências. Barra de menu: clique abre/fecha; menu Teclora, Preferências, Sair. Sem ícone no Dock (`LSUIElement`).
 
 Módulo **Tecpet** (mascote + Cursor): spec em [docs/tecpet.md](docs/tecpet.md). Profundidade: [docs/profundidade.md](docs/profundidade.md).
 
-Fora ainda: snippets, arquivos, janelas, Tecpet (overlay e IA). Também fora: loja, Sparkle, sandbox App Store, notarização, Windows, LLM que não seja Cursor.
+Fora ainda: arquivos, janelas, Tecpet (overlay e IA). Também fora: loja, Sparkle, sandbox App Store, notarização, Windows, LLM que não seja Cursor.
 
 ## Mapa
 
@@ -27,7 +27,9 @@ Fora ainda: snippets, arquivos, janelas, Tecpet (overlay e IA). Também fora: lo
 | `Teclora/Catalog/` | Enumeração de `.app` + filtro |
 | `Teclora/Support/` | `TecloraLog` (`os.Logger`, `app.teclora`) e Application Support |
 | `Teclora/Clipboard/` | Histórico local de texto; poll de `changeCount` |
-| `Teclora/Settings/` | Janela Geral + Clipboard |
+| `Teclora/Snippets/` | Snippets locais; Enter copia o corpo |
+| `Teclora/Quicklinks/` | URL ou caminho; Enter abre |
+| `Teclora/Settings/` | Geral, Clipboard, Snippets, Quicklinks |
 | `Teclora/Menu/` | `NSStatusItem` template |
 | `Teclora/Tecpet/` | Espécies + arte pixel (`Art/`, `species.json`) — ainda sem overlay |
 | `docs/profundidade.md` | Launcher Raycast-like + regras Cursor/tokens |

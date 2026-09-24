@@ -31,11 +31,25 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private func wire() {
         let settings = SettingsStore()
         let clipboard = ClipboardStore(settings: settings)
+        let snippets = SnippetStore()
+        let quicklinks = QuicklinkStore()
         let history = LaunchHistory()
-        let settingsWindow = SettingsWindowController(settings: settings, clipboard: clipboard)
+        let settingsWindow = SettingsWindowController(
+            settings: settings,
+            clipboard: clipboard,
+            snippets: snippets,
+            quicklinks: quicklinks
+        )
         let model = LauncherModel(
             history: history,
-            providers: [ClipboardProvider(store: clipboard), SystemCommandProvider()]
+            providers: [
+                ClipboardProvider(store: clipboard),
+                SnippetProvider(store: snippets),
+                QuicklinkProvider(store: quicklinks),
+                CalcProvider(),
+                LocalSystemProvider(),
+                SystemCommandProvider(),
+            ]
         )
         let panel = LauncherPanelController(model: model)
 
@@ -47,16 +61,19 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 history: history,
                 clipboard: clipboard,
                 closeLauncher: { panel.hide(restorePrevious: $0) },
-                showSettings: { settingsWindow.show() }
+                showSettings: { settingsWindow.show($0) }
             )
         }
         panel.onDeleteClipboard = { id in
             ConfirmRouter.deleteClipboard(id, clipboard: clipboard)
         }
-        clipboard.onChange = { [weak model] in
+        let refresh: () -> Void = { [weak model] in
             model?.refreshHits()
             settingsWindow.noteDataChange()
         }
+        clipboard.onChange = refresh
+        snippets.onChange = refresh
+        quicklinks.onChange = refresh
         settings.onChange = { [weak model] in
             clipboard.applyLimit()
             model?.refreshHits()
@@ -72,7 +89,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem = StatusItemController(
             onToggle: { [weak panel] in panel?.toggle() },
             onOpen: { [weak panel] in panel?.show() },
-            onSettings: { settingsWindow.show() },
+            onSettings: { settingsWindow.show(.general) },
             onQuit: { NSApp.terminate(nil) }
         )
         hotkeys = HotkeyCenter { [weak panel] in

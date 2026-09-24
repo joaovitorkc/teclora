@@ -1,16 +1,32 @@
 import KeyboardShortcuts
 import SwiftUI
 
+enum SettingsTab: Hashable {
+    case general
+    case clipboard
+    case snippets
+    case quicklinks
+}
+
 struct SettingsView: View {
     @Bindable var model: SettingsModel
 
     var body: some View {
-        TabView {
+        TabView(selection: $model.selectedTab) {
             GeneralSettingsTab()
                 .tabItem { Label("Geral", systemImage: "gearshape") }
+                .tag(SettingsTab.general)
             ClipboardSettingsTab(model: model)
                 .tabItem { Label("Clipboard", systemImage: "doc.on.clipboard") }
+                .tag(SettingsTab.clipboard)
+            SnippetsSettingsTab(store: model.snippets)
+                .tabItem { Label("Snippets", systemImage: "text.quote") }
+                .tag(SettingsTab.snippets)
+            QuicklinksSettingsTab(store: model.quicklinks)
+                .tabItem { Label("Quicklinks", systemImage: "link") }
+                .tag(SettingsTab.quicklinks)
         }
+        .tabViewStyle(.automatic)
         .frame(width: 520, height: 440)
     }
 }
@@ -21,12 +37,17 @@ struct SettingsView: View {
 final class SettingsModel {
     private let settings: SettingsStore
     private let clipboard: ClipboardStore
+    let snippets: SnippetStore
+    let quicklinks: QuicklinkStore
     var recordClipboard: Bool
     var clipboardLimit: Int
+    var selectedTab: SettingsTab = .general
 
-    init(settings: SettingsStore, clipboard: ClipboardStore) {
+    init(settings: SettingsStore, clipboard: ClipboardStore, snippets: SnippetStore, quicklinks: QuicklinkStore) {
         self.settings = settings
         self.clipboard = clipboard
+        self.snippets = snippets
+        self.quicklinks = quicklinks
         recordClipboard = settings.recordClipboard
         clipboardLimit = settings.clipboardLimit
     }

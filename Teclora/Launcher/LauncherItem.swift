@@ -16,6 +16,13 @@ enum LauncherAction: Sendable {
     case quit
     case copyClipboard(UUID)
     case openSettings
+    case copyText(String)
+    case newSnippet
+    case lockScreen
+    case sleep
+    case emptyTrash
+    case toggleMute
+    case openTarget(String)
 }
 
 enum LauncherKind: Sendable {
