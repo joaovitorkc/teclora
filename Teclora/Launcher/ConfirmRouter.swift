@@ -58,6 +58,23 @@ enum ConfirmRouter {
         case .openTarget(let target):
             closeLauncher(false)
             SystemActions.openTarget(target)
+        case .openFile(let path):
+            closeLauncher(false)
+            let url = URL(fileURLWithPath: path)
+            if alternate {
+                NSWorkspace.shared.activateFileViewerSelecting([url])
+            } else if !NSWorkspace.shared.open(url) {
+                TecloraLog.error("Não abriu o arquivo")
+            }
+        case .focusWindow(let target):
+            closeLauncher(false)
+            WindowActions.focus(target)
+        case .placeWindow(let target, let placement):
+            closeLauncher(false)
+            WindowActions.place(target, placement)
+        case .openAccessibilitySettings:
+            closeLauncher(false)
+            WindowActions.openAccessibilitySettings()
         }
     }
 

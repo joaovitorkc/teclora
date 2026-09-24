@@ -191,8 +191,15 @@ struct LauncherView: View {
             hint("Executar", keys: ["↵"], emphasized: true)
         case .emptyTrash:
             hint("Confirmar", keys: ["↵"], emphasized: true)
-        case .openTarget:
+        case .openTarget, .openAccessibilitySettings:
             hint("Abrir", keys: ["↵"], emphasized: true)
+        case .openFile:
+            hint("Abrir", keys: ["↵"], emphasized: !model.commandHeld)
+            hint("Mostrar no Finder", keys: ["⌘", "↵"], emphasized: model.commandHeld)
+        case .focusWindow:
+            hint("Focar", keys: ["↵"], emphasized: true)
+        case .placeWindow:
+            hint("Mover", keys: ["↵"], emphasized: true)
         case nil:
             hint("Limpar busca", keys: ["esc"], emphasized: true)
         }

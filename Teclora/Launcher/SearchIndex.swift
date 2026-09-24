@@ -7,7 +7,7 @@ enum SearchIndex {
         "Recentes", "Clipboard", "Snippets", "Quicklinks", "Comandos", "Aplicativos",
     ]
     private static let queryOrder = [
-        "Calculadora", "Aplicativos", "Clipboard", "Snippets", "Quicklinks", "Comandos",
+        "Calculadora", "Aplicativos", "Arquivos", "Janelas", "Clipboard", "Snippets", "Quicklinks", "Comandos",
     ]
 
     static func sections(

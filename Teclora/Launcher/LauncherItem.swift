@@ -23,6 +23,24 @@ enum LauncherAction: Sendable {
     case emptyTrash
     case toggleMute
     case openTarget(String)
+    case openFile(String)
+    case focusWindow(WindowTarget)
+    case placeWindow(WindowTarget, WindowPlacement)
+    case openAccessibilitySettings
+}
+
+enum WindowPlacement: Sendable {
+    case left
+    case right
+    case maximize
+    case center
+}
+
+struct WindowTarget: Sendable {
+    let id: UInt32
+    let pid: Int32
+    let title: String
+    let owner: String
 }
 
 enum LauncherKind: Sendable {

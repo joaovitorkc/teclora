@@ -61,7 +61,8 @@ Repo único (`github.com/joaovitorkc/teclora`). Sem servidor na VM. Passo a pass
 - Option+Space (não substitui o Spotlight) e ícone template na barra de menu
 - Catálogo em `/Applications`, `/System/Applications`, `~/Applications`
 - Histórico de clipboard (texto): gravar, tamanho máximo, fixar, copiar de volta, apagar
-- Snippets (nome, atalho, corpo), calculadora na busca, comandos de sistema e quicklinks
+- Snippets, calculadora, comandos de sistema e quicklinks
+- Arquivos via Spotlight (Enter abre, ⌘Enter revela) e janelas (focar; esquerda, direita, maximizar, centro)
 - Preferências: Geral, Clipboard, Snippets, Quicklinks
 
-Fora ainda: arquivos, janelas, Tecpet (overlay e IA). Sem loja, Sparkle ou sandbox App Store.
+Fora ainda: Tecpet (overlay e IA). Sem loja, Sparkle ou sandbox App Store.

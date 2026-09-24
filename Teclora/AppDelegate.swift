@@ -33,6 +33,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let clipboard = ClipboardStore(settings: settings)
         let snippets = SnippetStore()
         let quicklinks = QuicklinkStore()
+        let files = FileProvider()
         let history = LaunchHistory()
         let settingsWindow = SettingsWindowController(
             settings: settings,
@@ -46,6 +47,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                 ClipboardProvider(store: clipboard),
                 SnippetProvider(store: snippets),
                 QuicklinkProvider(store: quicklinks),
+                files,
+                WindowProvider(),
                 CalcProvider(),
                 LocalSystemProvider(),
                 SystemCommandProvider(),
@@ -74,6 +77,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         clipboard.onChange = refresh
         snippets.onChange = refresh
         quicklinks.onChange = refresh
+        files.onChange = { [weak model] in model?.refreshHits() }
         settings.onChange = { [weak model] in
             clipboard.applyLimit()
             model?.refreshHits()
