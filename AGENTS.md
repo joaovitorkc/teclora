@@ -14,7 +14,7 @@ Atalho **Option+Space** → painel. Apps, clipboard, snippets, calculadora, coma
 
 Módulo **Tecpet** (mascote + Cursor): spec em [docs/tecpet.md](docs/tecpet.md). Profundidade: [docs/profundidade.md](docs/profundidade.md).
 
-Fora ainda: Cursor e qualquer LLM. Também fora: loja, Sparkle, sandbox App Store, notarização, Windows.
+Cursor entra só pelo bridge local (key no Keychain). Fora: loja, Sparkle, sandbox App Store, notarização, Windows, outros LLMs.
 
 ## Mapa
 
@@ -31,9 +31,10 @@ Fora ainda: Cursor e qualquer LLM. Também fora: loja, Sparkle, sandbox App Stor
 | `Teclora/Quicklinks/` | URL ou caminho; Enter abre |
 | `Teclora/Files/` | Spotlight (`NSMetadataQuery`), teto 40 |
 | `Teclora/Windows/` | Janelas na tela; focar e encaixar |
-| `Teclora/Settings/` | Geral, Clipboard, Snippets, Quicklinks, Tecpet |
+| `Teclora/Settings/` | Geral, Clipboard, Snippets, Quicklinks, Tecpet, Cursor |
+| `Teclora/Cursor/` | Keychain, bridge, Connect JSON, callback das tools |
 | `Teclora/Menu/` | `NSStatusItem` template |
-| `Teclora/Tecpet/` | Espécies, overlay, chat stub (sem Cursor) |
+| `Teclora/Tecpet/` | Espécies, overlay, memória e turno do Cursor |
 | `docs/profundidade.md` | Launcher Raycast-like + regras Cursor/tokens |
 | `docs/tecpet.md` | Cinco pets, memória, permissões |
 | `.swiftlint.yml` | Gates: teto 350 linhas, sem `print`/`NSLog` diretos |

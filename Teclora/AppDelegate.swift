@@ -37,17 +37,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let files = FileProvider()
         let history = LaunchHistory()
         let tecpetStore = TecpetStore()
+        let brain = TecpetBrain(clipboard: clipboard, history: history)
         let settingsWindow = SettingsWindowController(
             settings: settings,
             clipboard: clipboard,
             snippets: snippets,
             quicklinks: quicklinks,
-            tecpet: tecpetStore
+            tecpet: tecpetStore,
+            brain: brain
         )
         let tecpet = TecpetModule(
             store: tecpetStore,
             history: history,
             clipboard: clipboard,
+            brain: brain,
             showSettings: { settingsWindow.show(.tecpet) }
         )
         let model = LauncherModel(

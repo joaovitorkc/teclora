@@ -11,14 +11,16 @@ final class SettingsWindowController {
         clipboard: ClipboardStore,
         snippets: SnippetStore,
         quicklinks: QuicklinkStore,
-        tecpet: TecpetStore
+        tecpet: TecpetStore,
+        brain: TecpetBrain
     ) {
         model = SettingsModel(
             settings: settings,
             clipboard: clipboard,
             snippets: snippets,
             quicklinks: quicklinks,
-            tecpet: tecpet
+            tecpet: tecpet,
+            brain: brain
         )
     }
 

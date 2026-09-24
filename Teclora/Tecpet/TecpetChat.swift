@@ -13,14 +13,16 @@ final class TecpetChatController {
     private let store: TecpetStore
     private let history: LaunchHistory
     private let clipboard: ClipboardStore
+    private let brain: TecpetBrain
     private let model = TecpetChatModel()
     private var panel: NSPanel?
     private var keyMonitor: Any?
 
-    init(store: TecpetStore, history: LaunchHistory, clipboard: ClipboardStore) {
+    init(store: TecpetStore, history: LaunchHistory, clipboard: ClipboardStore, brain: TecpetBrain) {
         self.store = store
         self.history = history
         self.clipboard = clipboard
+        self.brain = brain
     }
 
     func open() {
@@ -64,6 +66,19 @@ final class TecpetChatController {
         guard !text.isEmpty else { return }
         model.lines.append(ChatLine(fromPet: false, text: text))
         model.draft = ""
+        guard let key = CursorKeychain.load() else {
+            replyWithoutCursor(text)
+            return
+        }
+        let persona = store.species?.persona ?? ""
+        let modelId = CursorModelStore.load()
+        Task {
+            let answer = await brain.speak(text, persona: persona, apiKey: key, modelId: modelId)
+            model.lines.append(ChatLine(fromPet: true, text: answer))
+        }
+    }
+
+    private func replyWithoutCursor(_ text: String) {
         if openApp(named: text) {
             model.lines.append(ChatLine(fromPet: true, text: "Abri."))
         } else {

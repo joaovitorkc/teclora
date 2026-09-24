@@ -9,10 +9,16 @@ final class TecpetModule {
     private let chat: TecpetChatController
     private weak var status: StatusItemController?
 
-    init(store: TecpetStore, history: LaunchHistory, clipboard: ClipboardStore, showSettings: @escaping () -> Void) {
+    init(
+        store: TecpetStore,
+        history: LaunchHistory,
+        clipboard: ClipboardStore,
+        brain: TecpetBrain,
+        showSettings: @escaping () -> Void
+    ) {
         self.store = store
         provider = TecpetProvider(store: store)
-        chat = TecpetChatController(store: store, history: history, clipboard: clipboard)
+        chat = TecpetChatController(store: store, history: history, clipboard: clipboard, brain: brain)
         overlay = TecpetOverlayController(
             store: store,
             onOpenChat: { [chat] in chat.open() },

@@ -7,6 +7,7 @@ enum SettingsTab: Hashable {
     case snippets
     case quicklinks
     case tecpet
+    case cursor
 }
 
 struct SettingsView: View {
@@ -29,6 +30,9 @@ struct SettingsView: View {
             TecpetSettingsTab(store: model.tecpet)
                 .tabItem { Label("Tecpet", systemImage: "pawprint") }
                 .tag(SettingsTab.tecpet)
+            CursorSettingsTab(model: model.cursor)
+                .tabItem { Label("Cursor", systemImage: "key") }
+                .tag(SettingsTab.cursor)
         }
         .tabViewStyle(.automatic)
         .frame(width: 520, height: 440)
@@ -44,6 +48,7 @@ final class SettingsModel {
     let snippets: SnippetStore
     let quicklinks: QuicklinkStore
     let tecpet: TecpetStore
+    let cursor: CursorSettingsModel
     var recordClipboard: Bool
     var clipboardLimit: Int
     var selectedTab: SettingsTab = .general
@@ -53,13 +58,15 @@ final class SettingsModel {
         clipboard: ClipboardStore,
         snippets: SnippetStore,
         quicklinks: QuicklinkStore,
-        tecpet: TecpetStore
+        tecpet: TecpetStore,
+        brain: TecpetBrain
     ) {
         self.settings = settings
         self.clipboard = clipboard
         self.snippets = snippets
         self.quicklinks = quicklinks
         self.tecpet = tecpet
+        cursor = CursorSettingsModel(brain: brain)
         recordClipboard = settings.recordClipboard
         clipboardLimit = settings.clipboardLimit
     }
