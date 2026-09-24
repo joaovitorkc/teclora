@@ -8,11 +8,13 @@ App local, sem servidor, sem conta, sem tenant. Vive em `teclora/` neste hub. St
 
 Não aplicar `wi-iniciar-produto` (Next/Nest, `users` / `user_accesses`, portas). Não copiar shell e-SUS, Visa, Lavite nem qualquer app Electron/React.
 
-## Recorte atual (1)
+## Recorte atual
 
-Atalho **Option+Space** → painel → filtrar `.app` instalados → Enter abre → Esc fecha e devolve o foco. Sem ícone no Dock (`LSUIElement`). Sair pelo comando **Sair do Teclora** na lista.
+Atalho **Option+Space** → painel. Apps + comandos locais (em construção: clipboard, snippets, arquivos, janelas, sistema). Sem ícone no Dock (`LSUIElement`); **sim** barra de menu. Sair pelo comando ou pelo menu.
 
-Fora deste recorte: clipboard, snippets, janelas, quicklinks, arquivo, IA, loja, Sparkle, sandbox, notarização, Windows.
+Módulo **Tecpet** (mascote + Cursor): spec em [docs/tecpet.md](docs/tecpet.md). Profundidade: [docs/profundidade.md](docs/profundidade.md).
+
+Fora: loja, Sparkle, sandbox App Store, notarização, Windows, LLM que não seja Cursor.
 
 ## Mapa
 
@@ -23,6 +25,9 @@ Fora deste recorte: clipboard, snippets, janelas, quicklinks, arquivo, IA, loja,
 | `Teclora/Hotkey/` | Option+Space via KeyboardShortcuts |
 | `Teclora/Launcher/` | `NSPanel` + SwiftUI busca/lista |
 | `Teclora/Catalog/` | Enumeração de `.app` + filtro |
+| `Teclora/Tecpet/` | Espécies + arte pixel (`Art/`, `species.json`) |
+| `docs/profundidade.md` | Launcher Raycast-like + regras Cursor/tokens |
+| `docs/tecpet.md` | Cinco pets, memória, permissões |
 | `.swiftlint.yml` | Gates: teto 350 linhas, sem `print`/`NSLog` diretos |
 | `.cursor/environment.json` | Cloud: repo único, sem HTTP; ver [docs/cloud-environments.md](docs/cloud-environments.md) |
 

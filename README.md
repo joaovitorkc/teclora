@@ -1,6 +1,6 @@
 # Teclora
 
-Launcher nativo para Mac (Tahoe). Recorte 1: atalho global, busca de aplicativos, Enter abre, Esc devolve o foco.
+Launcher nativo para Mac (Tahoe). Option+Space, apps, clipboard e barra de menu; profundidade em [docs/profundidade.md](docs/profundidade.md). Tecpet: [docs/tecpet.md](docs/tecpet.md).
 
 Não é app web. Não tem servidor, login nem porta HTTP.
 
@@ -55,8 +55,9 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer swiftlint lint
 
 Repo único (`github.com/joaovitorkc/teclora`). Sem servidor na VM. Passo a passo: [docs/cloud-environments.md](docs/cloud-environments.md).
 
-## Recorte 1 — o que entra
+## Recorte — o que entra
 
 - Option+Space (não substitui o Spotlight)
-- Catálogo em `/Applications`, `/System/Applications`, `~/Applications` (um nível, incluindo Utilities)
-- Sem clipboard, snippets, janelas, IA ou loja
+- Catálogo em `/Applications`, `/System/Applications`, `~/Applications`
+- Barra de menu + clipboard (F1). Snippets, arquivos, janelas, Tecpet: na fila da profundidade
+- Sem loja, Sparkle ou sandbox App Store

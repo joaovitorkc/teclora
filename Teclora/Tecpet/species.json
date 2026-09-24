@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "activeSpeciesId": "pipoca",
+  "species": [
+    {
+      "id": "pipoca",
+      "defaultName": "Pipoca",
+      "art": "pipoca.png",
+      "vibe": "comediante"
+    },
+    {
+      "id": "bronca",
+      "defaultName": "Bronca",
+      "art": "bronca.png",
+      "vibe": "engracado-raivoso"
+    },
+    {
+      "id": "lumen",
+      "defaultName": "Lúmen",
+      "art": "lumen.png",
+      "vibe": "calmo"
+    },
+    {
+      "id": "nimbus",
+      "defaultName": "Nimbus",
+      "art": "nimbus.png",
+      "vibe": "pesquisador"
+    },
+    {
+      "id": "pessego",
+      "defaultName": "Pêssego",
+      "art": "pessego.png",
+      "vibe": "timido-quente"
+    }
+  ]
+}
