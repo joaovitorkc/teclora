@@ -122,9 +122,13 @@ final class TecpetStore {
         onChange?()
     }
 
-    private var fileURL: URL? {
+    private var fileURL: URL? { Self.stateURL(create: true) }
+
+    private static func stateURL(create: Bool) -> URL? {
         guard let root = AppSupport.directory()?.appendingPathComponent("tecpet", isDirectory: true) else { return nil }
-        try? FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        if create {
+            try? FileManager.default.createDirectory(at: root, withIntermediateDirectories: true)
+        }
         return root.appendingPathComponent("state.json")
     }
 
@@ -139,8 +143,8 @@ final class TecpetStore {
             muted: false,
             hidden: false
         )
-        guard let root = AppSupport.directory()?.appendingPathComponent("tecpet/state.json"),
-              let data = try? Data(contentsOf: root),
+        guard let url = stateURL(create: false),
+              let data = try? Data(contentsOf: url),
               let state = try? JSONDecoder().decode(TecpetState.self, from: data) else { return standard }
         return state
     }

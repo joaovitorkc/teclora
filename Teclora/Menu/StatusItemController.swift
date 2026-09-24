@@ -6,6 +6,7 @@ final class StatusItemController: NSObject {
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     private let onToggle: () -> Void
     private let onOpen: () -> Void
+    private let onTecpet: () -> Void
     private let onSettings: () -> Void
     private let onQuit: () -> Void
     private var menu: NSMenu?
@@ -16,11 +17,13 @@ final class StatusItemController: NSObject {
     init(
         onToggle: @escaping () -> Void,
         onOpen: @escaping () -> Void,
+        onTecpet: @escaping () -> Void,
         onSettings: @escaping () -> Void,
         onQuit: @escaping () -> Void
     ) {
         self.onToggle = onToggle
         self.onOpen = onOpen
+        self.onTecpet = onTecpet
         self.onSettings = onSettings
         self.onQuit = onQuit
         super.init()
@@ -65,6 +68,7 @@ final class StatusItemController: NSObject {
     private func makeMenu() -> NSMenu {
         let menu = NSMenu()
         menu.addItem(item("Teclora", action: #selector(openLauncher)))
+        menu.addItem(item("Tecpet", action: #selector(openTecpet)))
         menu.addItem(item("Preferências", action: #selector(openSettings), key: ","))
         menu.addItem(.separator())
         menu.addItem(item("Sair", action: #selector(quit), key: "q"))
@@ -118,6 +122,7 @@ final class StatusItemController: NSObject {
     }
 
     @objc private func openLauncher() { onOpen() }
+    @objc private func openTecpet() { onTecpet() }
     @objc private func openSettings() { onSettings() }
     @objc private func quit() { onQuit() }
 }

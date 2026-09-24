@@ -115,6 +115,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         statusItem = StatusItemController(
             onToggle: { [weak panel] in panel?.toggle() },
             onOpen: { [weak panel] in panel?.show() },
+            onTecpet: { tecpet.openChat() },
             onSettings: { settingsWindow.show(.general) },
             onQuit: { NSApp.terminate(nil) }
         )

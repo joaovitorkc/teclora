@@ -5,6 +5,18 @@ struct Species: Identifiable, Codable, Sendable, Equatable {
     let defaultName: String
     let art: String
     let vibe: String
+    let persona: String
+
+    var vibeLabel: String {
+        switch vibe {
+        case "comediante": "Comediante. Trocadilho, energia alta, nunca humilha."
+        case "engracado-raivoso": "Engraçado e raivoso. Curto, irônico — mas executa."
+        case "calmo": "Calmo e didático. Explica o porquê; não chuta."
+        case "pesquisador": "Curioso. Pesquisa antes de opinar."
+        case "timido-quente": "Tímido e quente. Pede confirmação antes de agir."
+        default: vibe
+        }
+    }
 }
 
 private struct SpeciesFile: Codable {

@@ -13,6 +13,11 @@ struct TecpetSettingsTab: View {
                     Text(species.defaultName).tag(species.id)
                 }
             }
+            if let species = store.species {
+                Text(species.vibeLabel)
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+            }
             TextField("Nome para chamar", text: Binding(
                 get: { store.wakeName },
                 set: { store.setWakeName($0) }
@@ -20,6 +25,10 @@ struct TecpetSettingsTab: View {
             Toggle("Responder ao chamar", isOn: Binding(
                 get: { store.respondToWake },
                 set: { store.setRespondToWake($0) }
+            ))
+            Toggle("Silenciar", isOn: Binding(
+                get: { store.muted },
+                set: { store.setMuted($0) }
             ))
             Picker("Barra de menu", selection: Binding(
                 get: { store.menuStyle },

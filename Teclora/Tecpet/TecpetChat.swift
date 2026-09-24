@@ -26,6 +26,7 @@ final class TecpetChatController {
     func open() {
         let panel = panel ?? makePanel()
         self.panel = panel
+        panel.title = store.wakeName.isEmpty ? "Tecpet" : store.wakeName
         NSApp.activate(ignoringOtherApps: true)
         panel.center()
         panel.makeKeyAndOrderFront(nil)

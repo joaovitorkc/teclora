@@ -13,4 +13,6 @@ timeline.xctimeline
 .env
 .env.*
 !.env.example
+cursor-sdk-bridge/
+*.tar.gz
 
