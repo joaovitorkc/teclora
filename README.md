@@ -53,7 +53,7 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer swiftlint lint
 
 ## Cloud Agent
 
-Repo único (`github.com/wi-consultoria/teclora` quando existir). Sem servidor na VM. Passo a passo: [docs/cloud-environments.md](docs/cloud-environments.md).
+Repo único (`github.com/joaovitorkc/teclora`). Sem servidor na VM. Passo a passo: [docs/cloud-environments.md](docs/cloud-environments.md).
 
 ## Recorte 1 — o que entra
 
