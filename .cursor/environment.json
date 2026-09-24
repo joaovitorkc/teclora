@@ -1,0 +1,5 @@
+{
+  "name": "Teclora",
+  "install": "bash .cursor/scripts/cloud-install.sh",
+  "start": "bash .cursor/scripts/cloud-start.sh"
+}

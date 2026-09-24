@@ -24,6 +24,7 @@ Fora deste recorte: clipboard, snippets, janelas, quicklinks, arquivo, IA, loja,
 | `Teclora/Launcher/` | `NSPanel` + SwiftUI busca/lista |
 | `Teclora/Catalog/` | Enumeração de `.app` + filtro |
 | `.swiftlint.yml` | Gates: teto 350 linhas, sem `print`/`NSLog` diretos |
+| `.cursor/environment.json` | Cloud: repo único, sem HTTP; ver [docs/cloud-environments.md](docs/cloud-environments.md) |
 
 ## Como abrir
 
