@@ -218,16 +218,18 @@ final class LauncherPanelController: NSObject, NSWindowDelegate {
     private func positionPanel() {
         let size = NSSize(width: TecloraChrome.panelWidth, height: TecloraChrome.panelHeight)
         let mouse = NSEvent.mouseLocation
-        let screen = NSScreen.main
-            ?? NSScreen.screens.first(where: { NSMouseInRect(mouse, $0.frame, false) })
+        let screen = NSScreen.screens.first { NSMouseInRect(mouse, $0.frame, false) }
+            ?? NSScreen.main
             ?? NSScreen.screens.first
         guard let screen else {
             panel.setFrame(NSRect(x: 200, y: 200, width: size.width, height: size.height), display: true)
             return
         }
         let visible = screen.visibleFrame
-        let x = visible.midX - size.width / 2
-        let y = visible.maxY - size.height - (visible.height * 0.16)
+        var x = visible.midX - size.width / 2
+        var y = visible.maxY - size.height - (visible.height * 0.16)
+        x = min(max(x, visible.minX + 12), visible.maxX - size.width - 12)
+        y = min(max(y, visible.minY + 12), visible.maxY - size.height - 12)
         panel.setFrame(NSRect(x: x, y: y, width: size.width, height: size.height), display: true)
     }
 }
