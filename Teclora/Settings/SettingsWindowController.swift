@@ -47,7 +47,7 @@ final class SettingsWindowController {
         window.title = "Preferências"
         window.styleMask = [.titled, .closable, .miniaturizable]
         window.isReleasedWhenClosed = false
-        window.setContentSize(NSSize(width: 520, height: 440))
+        window.setContentSize(NSSize(width: 520, height: 520))
         return window
     }
 }

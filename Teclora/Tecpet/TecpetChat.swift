@@ -52,7 +52,7 @@ final class TecpetChatController {
         panel.isReleasedWhenClosed = false
         panel.level = .floating
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
-        panel.setContentSize(NSSize(width: 320, height: 360))
+        panel.setContentSize(NSSize(width: 320, height: 390))
         keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
             let swallow = MainActor.assumeIsolated { () -> Bool in
                 guard let self, event.window === self.panel, event.keyCode == 53 else { return false }
